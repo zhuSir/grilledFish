@@ -1,0 +1,41 @@
+<idea-plugin>
+  <id>com.0full.grilledFish</id>
+  <name>GrilledFish</name>
+  <version>1.0</version>
+  <vendor email="dow2019@sina.com" url="http://www.0fll.com">厦门鑫家网企业管理咨询有限公司</vendor>
+
+  <description><![CDATA[
+    This is a private working tool.<br/>
+  ]]></description>
+
+  <change-notes><![CDATA[
+      version 1.0.0:<br>
+      1、Show poisonous fish;
+      2、Set git tags and push;
+    ]]>
+  </change-notes>
+
+  <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+  </extensions>
+
+  <actions>
+    <action id="eat_fish_save_shell_id" class="com.intellij.action.fish.ShowFishAction" text="ShowFish"
+            description="show poisonous fish">
+      <add-to-group group-id="ToolsMenu" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="alt G"/>
+    </action>
+    <action id="FishTagAction" class="com.intellij.action.git.PopupAction" text="Git Tag Push"
+            description="Git set tag and push">
+      <add-to-group group-id="ToolsMenu" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="alt T"/>
+    </action>
+  </actions>
+
+</idea-plugin>
