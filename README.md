@@ -1,88 +1,23 @@
-# b-web 新房源系统
->###关于文档维护说明：
-大家可以编写md文档来说明一些公用的方法或者代码功能以及设计，markdown语言速成可以移步
-[MarkDown语言速成](./document/MDBOOK.md)
-
->###swagger2地址：
-http://localhost:8086/docs.html
-
->###代码生成器地址：
-http://localhost:8086/generate
-
-目前只可以生成entity，字段需要修改为正确的驼峰式;
-
->###分页说明：
- 目前提供一种基于MybatisPlus构造器的分页方法，简化sql，加快开发，有需要的同学可以移步
- [分页说明](./document/PageHelp.md) 
-
->###接口设计手册：
- [接口命名说明](./document/APIGuidelines.md)
- 
->###登录相关：
- [相关说明](./document/LoginRelated.md) 
-  
->###图片说明：
- 图片都存在阿里云OSS服务器上，因此可以用配置过的参数做缩略图和水印图等等，
-
-```
-//小图
-export const smallThumb = '?x-oss-process=style/thumb';
-//中图
-export const midThumb = '?x-oss-process=style/middlethumb';
-//大图
-export const bigThumb = '?x-oss-process=style/bigthumb';
-//水印
-export const water = '?x-oss-process=style/water';
-```
-比如一张图URL 路径为 
-`http://img.0be.cn/FileUpload/image/xxxx.jpg`
-那么他的最小缩略图就是 
-`http://img.0be.cn/FileUpload/image/xxxx.jpg?x-oss-process=style/thumb`
-
->###参数获取说明：
-需要传入公司id 和规则编号 子类型没有的话填空
-```
-    SetUpService
-    /**
-     * 获取系统参数
-     * @param companyId 公司id
-     * @param ruleNo 规则编码
-     * @param paramStr 规则字符串（一般定位具体哪个规则）
-     * @return
-     */
-    SysRuleParamsDto getSysRuleParams(Integer companyId,Integer ruleNo,String paramStr);
-```
-
-
->###权限控制说明：
-[相关说明](./document/RuleHelp.md)
-
-https://shimo.im/docs/TrX83ktVWyyDt8Cv/ 《权限控制说明文档》
-
-
-
->###项目一键部署发布：
- [相关说明](./document/PublishCI.md) 
- 
- 
->###数据库修改相关脚步统一存放处：
- [相关说明](./document/sql/) 
- 
- >###任务调度中心说明：
-
-  为了统一管理定时作业，将定时作业交由调度中心管理，只需要完成作业步骤，作业步骤可以在
-  `BWebApplicationTests`中debug，功能正常后在调度中心配置执行时间即可。
-  本地要被调度中心执行可以用内网穿透。
-  地址：http://121.41.13.216:8085/xxl-job-admin
-  
-  
-  账号：baseuser
-  
-  
-  密码：base8899
-  
-  
-  [相关说明](https://www.jianshu.com/p/fa7186bea84b) 
-  
-  >###微信扫码相关：
-   [相关说明](./document/ScanUploadRelate.md) 
+  ># 烤鱼插件使用
+   
+   ## 一、安装本地插件
+   ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625661360-097d06c1-38f7-4ca8-92ff-ead01c1d4eb5.png#align=left&display=inline&height=738&margin=%5Bobject%20Object%5D&name=image.png&originHeight=738&originWidth=998&size=117766&status=done&style=none&width=998)
+   选择插件包 GrilledFish.zip
+   
+   
+   ## 二、功能说明
+   
+   
+   ## 1、获取最新tag并push当前代码；
+   ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604627477445-bf857319-a782-42ab-803b-e760e7e4b433.png#align=left&display=inline&height=365&margin=%5Bobject%20Object%5D&name=image.png&originHeight=365&originWidth=550&size=46150&status=done&style=none&width=550)     
+   快捷键 Alt + T；
+   打开idea第一次需要输入git账号密码
+   ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625731843-bfb377d2-e892-4943-968e-c7dd0c908921.png#align=left&display=inline&height=194&margin=%5Bobject%20Object%5D&name=image.png&originHeight=194&originWidth=300&size=22453&status=done&style=none&width=300)
+   提交账号密码后会提示最新的tag；直接提交即可
+   ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625759654-6044a7dd-8fa5-4c4d-89fb-a8048454ae3e.png#align=left&display=inline&height=544&margin=%5Bobject%20Object%5D&name=image.png&originHeight=544&originWidth=520&size=33866&status=done&style=none&width=520)
+       ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625790466-57b81e8c-30c8-433f-aed3-d61eb21348b3.png#align=left&display=inline&height=124&margin=%5Bobject%20Object%5D&name=image.png&originHeight=124&originWidth=266&size=15754&status=done&style=none&width=266)
+       ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625881027-b72c3aea-e74b-4243-a0b1-ab9e3b77b729.png#align=left&display=inline&height=115&margin=%5Bobject%20Object%5D&name=image.png&originHeight=115&originWidth=220&size=17248&status=done&style=none&width=220)
+   ![image.png](https://cdn.nlark.com/yuque/0/2020/png/2796282/1604625899271-2be08586-68f5-41c5-abd5-b37277cb419d.png#align=left&display=inline&height=555&margin=%5Bobject%20Object%5D&name=image.png&originHeight=555&originWidth=915&size=37446&status=done&style=none&width=915)
+   
+   ## 二、获取毒鸡汤
+   快捷键：Alt + G
