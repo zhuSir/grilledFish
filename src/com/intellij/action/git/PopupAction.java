@@ -1,18 +1,17 @@
 package com.intellij.action.git;
 
 import com.intellij.action.data.DataCenter;
+import com.intellij.action.data.FishConfig;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import groovy.util.logging.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,18 +41,45 @@ public class PopupAction extends AnAction {
         log.info(" === >> appending node tag");
         //Get project root path
         String basePath = e.getProject().getBasePath();
+        log.info(" === >> basePath: "+basePath);
         try{
+
             if(this.git == null){
-                git = Git.open( new File(basePath+"/.git"));
+                git = Git.open( new File(basePath+"/.git/"));
+                //Init config
+                FishConfig.init(basePath);
+            }else{
+                //判断是否是这个项目的
+                String gitDirectPath = this.git.getRepository().getDirectory().getPath();
+                log.info("==>: gitDirectPath: "+gitDirectPath);
+                String baseDirectPath = basePath+"/.git";
+                baseDirectPath = baseDirectPath.replaceAll("/","");
+                gitDirectPath = gitDirectPath.replaceAll("\\\\","");
+                if(!gitDirectPath.equals(baseDirectPath)){
+                    git = Git.open( new File(basePath+"/.git/"));
+                    //设置 配置为空
+                    DataCenter.reset();
+                    DataCenter.resetConfig();
+                    //Init config
+                    FishConfig.init(basePath);
+                }
             }
+            //读取配置
+            DataCenter.readConfig();
             //提交代码到本地仓库
             //RevCommit commit = git.commit().setMessage("initial commit").call();
-
             List<Ref> tags = git.tagList().call();
             List<String> tagList = new ArrayList<>();
             String str = "";
             for (Ref ref : tags) {
-                tagList.add(ref.getName().split("/")[2]);
+                String tag = ref.getName().split("/")[2];
+                //判断配置中的需要过滤的前缀
+                if(DataCenter.config != null && DataCenter.config.getPrefix() != null){
+                    if(tag.indexOf(DataCenter.config.getPrefix()) == -1){
+                        continue;
+                    }
+                }
+                tagList.add(tag);
             }
             //sort list
             Collections.sort(tagList);
@@ -98,22 +124,30 @@ public class PopupAction extends AnAction {
             }
             System.out.println("Committed to repository at " + git.getRepository().getDirectory());
             DataCenter.TAG_LIST = str;
-            String lastTag = tagList.get(tagList.size()-1);
-            if(StringUtils.isNotBlank(lastTag)){
-                String oldLastNumber = lastTag.substring(lastTag.lastIndexOf(".")+1,lastTag.length());
-                Integer lastNumber = Integer.valueOf(oldLastNumber.replaceAll("[\\D]+",""))+1;
-                lastTag = lastTag.substring(0,lastTag.lastIndexOf(".")+1)+lastNumber.toString();
+            if(tagList != null && !tagList.isEmpty()){
+                String lastTag = tagList.get(tagList.size()-1);
+                if(StringUtils.isNotBlank(lastTag)){
+                    String oldLastNumber = lastTag.substring(lastTag.lastIndexOf(".")+1,lastTag.length());
+                    Integer lastNumber = Integer.valueOf(oldLastNumber.replaceAll("[\\D]+",""))+1;
+                    lastTag = lastTag.substring(0,lastTag.lastIndexOf(".")+1)+lastNumber.toString();
+                }
+                DataCenter.LAST_TAG_TEXT = lastTag;
             }
-            DataCenter.LAST_TAG_TEXT = lastTag;
+
         }catch (Exception exception) {
             exception.printStackTrace();
         }
-        if(DataCenter.GIT_ACCOUNT == null || DataCenter.GIT_PASSWORD == null){
-            AccountDialog dialog = new AccountDialog();
-            dialog.show();
+        //judge config not null
+        if(DataCenter.config == null){
+            //read git cache file
+            DataCenter.readConfig();
+            if(DataCenter.config == null){
+                AccountDialog dialog = new AccountDialog();
+                dialog.show();
+            }
         }
         //Show custom dialog
-        if(DataCenter.GIT_ACCOUNT != null || DataCenter.GIT_PASSWORD != null){
+        if(DataCenter.config.getAt() != null && DataCenter.config.getPw() != null){
             PushTagDialog dialog = new PushTagDialog(git);
             dialog.show();
         }

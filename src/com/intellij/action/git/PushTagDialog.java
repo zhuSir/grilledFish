@@ -8,7 +8,6 @@ import com.intellij.ui.EditorTextField;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import javax.annotation.Nullable;
@@ -92,7 +91,7 @@ public class PushTagDialog extends DialogWrapper {
                     this.close(200);
 
                     git.tag().setName(tag).call();
-                    push(git,null,new UsernamePasswordCredentialsProvider(DataCenter.GIT_ACCOUNT,DataCenter.GIT_PASSWORD));
+                    push(git,null,new UsernamePasswordCredentialsProvider(DataCenter.config.getAt(),DataCenter.config.getPw()));
                     //git.push().setCredentialsProvider().setPushTags().call();
 
                     Messages.showDialog("Push successful tag: "+ tag,"Grilled Fish", new String[]{"Close"},0,null);
